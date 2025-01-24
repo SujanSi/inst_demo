@@ -21,10 +21,7 @@
               <a class="nav-link" href="{% url 'inst:home' %}">Home</a>
             </li>
             <li class="nav-item  mr-4">
-              <a class="nav-link" href="#">Explore</a>
-            </li>
-            <li class="nav-item  mr-4">
-              <a class="nav-link" href="#">Notifications</a>
+              <a class="nav-link" href="{% url 'inst:notifications' %}">Notifications</a>
             </li>
             <li class="nav-item dropdown mr-2">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -32,10 +29,20 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="{% url 'inst:story' %}">Story</a>
-                <a class="dropdown-item" href="#">Post</a>
+                <a class="dropdown-item" href="{% url 'inst:create_post' %}">Post</a>
             </li>
+            <li class="nav-item dropdown mr-2">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Settings
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{% url 'inst:update_profile' %}">Update Profile</a>
+                <a class="dropdown-item" href="{% url 'inst:change_password' %}">Change Password</a>
+            </li>
+
+
         <li class="nav-item  mr-4">
-          <a class="nav-link" href="{% url 'inst:profile' %}">Profile</a>
+          <a class="nav-link" href="{% url 'inst:profile_view' %}">Profile</a>
         </li>
           </ul>
           <form class="form-inline my-2 my-lg-0">
@@ -43,6 +50,7 @@
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
           </form>
         </div>
+            <a href="{% url 'inst:logout_view' %}">Logout</a>
       </nav>
     </div>
 

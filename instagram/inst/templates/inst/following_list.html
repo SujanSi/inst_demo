@@ -1,0 +1,17 @@
+{% extends "inst/base.html" %}
+{% block content %}
+<h3>{{ profile.user.username }}'s Following</h3>
+<ul>
+    {% for user in following %}
+        <li>
+            <a href="{% url 'inst:user_profile' user.user.username %}">
+                <img src="{{ user.profile_pic.url }}" alt="Profile Picture" style="width: 40px; height: 40px; border-radius: 50%;"> 
+                {{ user.user.username }}
+            </a>
+        </li>
+    {% empty %}
+        <p>Not following anyone yet.</p>
+    {% endfor %}
+</ul>
+<a href="{% url 'inst:user_profile' profile.user.username %}">Back to Profile</a>
+{% endblock %}

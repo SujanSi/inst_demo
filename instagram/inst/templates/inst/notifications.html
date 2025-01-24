@@ -1,0 +1,15 @@
+{% for request in follow_requests %}
+    <div>
+        <p>{{ request.sender.username }} wants to follow you.</p>
+        <form method="POST" action="{% url 'inst:accept_follow_request' request.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">Accept</button>
+        </form>
+        <form method="POST" action="{% url 'inst:reject_follow_request' request.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Reject</button>
+        </form>
+    </div>
+{% empty %}
+    <p>No follow requests.</p>
+{% endfor %}

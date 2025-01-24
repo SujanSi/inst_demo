@@ -1,0 +1,18 @@
+{% extends "inst/base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Users Who Liked This Post</h2>
+  <p><strong>Post by:</strong> {{ post.author.user.username }}</p>
+  <hr>
+  <ul class="list-group">
+    {% for like in likes %}
+      <li class="list-group-item">
+        {{ like.user.user.username }}
+      </li>
+    {% empty %}
+      <li class="list-group-item">No likes yet.</li>
+    {% endfor %}
+  </ul>
+  <a href="{% url 'inst:home' %}" class="btn btn-secondary mt-3">Back to Home</a>
+</div>
+{% endblock content %}

@@ -1,0 +1,77 @@
+{% extends "inst/base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="vh-100">
+    <div class="container py-5 h-50">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-md-9 col-lg-7 col-xl-5">
+                <div class="card" style="border-radius: 15px;">
+                    <div class="card-body p-4">
+                        <div class="d-flex text-black">
+                            <div class="flex-shrink-0">
+                                <img src="{{ profile.profile_pic.url }}" alt="Upload Photo Here" class="img-fluid" style="width: 180px; height:200px; border-radius: 10px; object-fit: cover;">
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5 class="ml-3 d-inline-block">{{ profile.user.username }}</h5>
+                                <div class="d-flex justify-content-start rounded-3 p-2 m-3" style="background-color: #efefef;">
+                                    <div>
+                                        <p class="small text-muted mb-1">Following</p>
+                                        <p class="mb-0 ml-3">
+                                          <a href="{% url 'inst:following_list' profile.user.username %}">{{ following_count }}</a>
+                                        </p>
+                                    </div>
+                                    <div class="px-3">
+                                        <p class="small text-muted mb-1">Followers</p>
+                                        <p class="mb-0 ml-3">
+                                          <a href="{% url 'inst:followers_list' profile.user.username %}">{{ followers_count }}</a>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="d-flex pt-1 ml-3 mr-3">
+                                  {% if show_follow_button %}
+                                  <form method="POST" action="{% url 'inst:user_profile' profile.user.username %}">
+                                      {% csrf_token %}
+                                      <button type="submit" class="btn btn-primary flex-grow-1">Follow</button>
+                                  </form>
+                                  {% elif follow_request_sent %}
+                                  <p class="text-warning">Follow request sent.</p>
+                                  {% elif is_following %}
+                                  <p class="text-success">You are following {{ profile.user.username }}.</p>
+                                  {% endif %}
+                              </div>
+                            </div>
+                        </div>
+                        <p>{{ profile.bio }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h5 class="text-center mt-4">Posts</h5>
+</section>
+<hr>
+
+<div class="container">
+    <div class="row">
+        {% for post in posts %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img class="card-img-top img-fluid" src="{{ post.image.url }}" alt="Card image cap" style="width: 100%; height: 220px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.author.user.username }}</h5>
+                    <p class="card-text">{{ post.caption }}</p>
+                    <p class="card-text">
+                        <small class="text-muted">Posted on {{ post.pub_date|date:"F d, Y H:i" }}</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p class="text-center">No posts available.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

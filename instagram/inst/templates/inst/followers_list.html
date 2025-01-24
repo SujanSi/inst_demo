@@ -1,0 +1,17 @@
+{% extends "inst/base.html" %}
+{% block content %}
+<h3>{{ profile.user.username }}'s Followers</h3>
+<ul>
+    {% for follower in followers %}
+        <li>
+            <a href="{% url 'inst:user_profile' follower.user.username %}">
+                <img src="{{ follower.profile_pic.url }}" alt="Profile Picture" style="width: 40px; height: 40px; border-radius: 50%;"> 
+                {{ follower.user.username }}
+            </a>
+        </li>
+    {% empty %}
+        <p>No followers yet.</p>
+    {% endfor %}
+</ul>
+<a href="{% url 'inst:user_profile' profile.user.username %}">Back to Profile</a>
+{% endblock %}

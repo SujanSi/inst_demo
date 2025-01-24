@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from .models import Profile,Post,Story,Comment
 
 
 class LoginForm(forms.Form):
@@ -36,8 +37,29 @@ class SignupForm(UserCreationForm):
 
 
 
-class StoryForm(forms.Form):
-    image = forms.ImageField()
+class StoryForm(forms.ModelForm):
+    class Meta:
+        model = Story
+        fields = ['image']  # Include other fields as necessary
 
-class PostForm(forms.Form):
-    image = forms.ImageField()
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['caption', 'image']
+        widgets = {
+            'caption': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Write a caption...'}),
+        }
+
+
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['bio', 'profile_pic']
+
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']

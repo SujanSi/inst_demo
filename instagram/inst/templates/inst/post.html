@@ -1,0 +1,34 @@
+{% extends "inst/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white border-0">
+                    <h4 class="text-center">Create a New Post</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Caption Field -->
+                        <div class="mb-3">
+                            <label for="{{ form.caption.id_for_label }}" class="form-label">Caption</label>
+                            <input type="text" name="caption" class="form-control" id="{{ form.caption.id_for_label }}" value="{{ form.caption.value|default_if_none:'' }}">
+                        </div>
+                        
+                        <!-- Image Field -->
+                        <div class="mb-3">
+                            <label for="{{ form.image.id_for_label }}" class="form-label">Image</label>
+                            <input type="file" name="image" class="form-control" id="{{ form.image.id_for_label }}">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100">Upload Post</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

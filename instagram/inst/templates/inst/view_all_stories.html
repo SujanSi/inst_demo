@@ -1,0 +1,95 @@
+{% extends "inst/base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>All Stories</h2>
+
+    <!-- Display the logged-in user's stories -->
+    {% if user_stories %}
+    <div class="user-stories">
+        <h3>Your Stories</h3>
+        <div class="stories-feed">
+            {% for story in user_stories %}
+            <div class="story-circle-container">
+                <div class="story-circle">
+                    <img src="{{ story.image.url }}" alt="Your Story" class="story-image">
+                </div>
+                <p class="story-username">{{ story.author.user.username }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <p>You haven't uploaded any stories yet.</p>
+    {% endif %}
+
+    <hr>
+
+    <!-- Display other users' stories -->
+    <h3>Other Stories</h3>
+    <div class="stories-container">
+        {% for story in other_stories %}
+        <div class="story-circle-container">
+            <div class="story-circle">
+                <img src="{{ story.image.url }}" alt="{{ story.author.username }}'s Story" class="story-image">
+            </div>
+            <p>{{ story.author.user.username }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    /* Similar styling as before */
+    .story-circle-container {
+        display: inline-block;
+        text-align: center;
+        margin: 0 15px;
+        position: relative;
+    }
+
+    .story-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 2px solid #fff; /* border color */
+        margin-bottom: 8px;
+        transition: transform 0.3s ease;
+    }
+
+    .story-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .user-stories .story-circle {
+        border-color: #4c6ef5;
+        box-shadow: 0 0 5px 2px rgba(76, 110, 245, 0.4);
+    }
+
+    .story-circle-container p {
+        font-size: 14px;
+        color: #333;
+        font-weight: bold;
+        max-width: 80px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .stories-container {
+        display: flex;
+        overflow-x: auto;
+        padding: 15px 0;
+    }
+
+    .stories-container::-webkit-scrollbar {
+        display: none; /* Hide scrollbar */
+    }
+
+    .story-circle-container:hover .story-circle {
+        transform: scale(1.1); /* Enlarge the image on hover */
+    }
+</style>
+{% endblock %}

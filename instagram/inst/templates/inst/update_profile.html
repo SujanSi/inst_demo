@@ -1,0 +1,44 @@
+{% extends "inst/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white border-0">
+                    <h4 class="text-center">Update Your Profile</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Display Previous Profile Picture -->
+                        <div class="mb-3 text-center">
+                            {% if form.profile_pic.value %}
+                                <img src="{{ form.profile_pic.value.url }}" alt="Profile Picture" class="img-fluid rounded-circle" style="max-width: 150px; max-height: 150px;">
+                            {% else %}
+                                <img src="{% static 'inst/images/default_profile_pic.jpg' %}" alt="Default Profile Picture" class="img-fluid rounded-circle" style="max-width: 150px; max-height: 150px;">
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Profile Picture Field -->
+                        <div class="mb-3">
+                            <label for="{{ form.profile_pic.id_for_label }}" class="form-label">Profile Picture</label>
+                            <input type="file" name="profile_pic" class="form-control" id="{{ form.profile_pic.id_for_label }}">
+                        </div>
+                        
+                        <!-- Bio Field -->
+                        <div class="mb-3">
+                            <label for="{{ form.bio.id_for_label }}" class="form-label">Bio</label>
+                            <textarea name="bio" class="form-control" id="{{ form.bio.id_for_label }}">{{ form.bio.value|default_if_none:'' }}</textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
