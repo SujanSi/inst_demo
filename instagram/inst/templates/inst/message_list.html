@@ -1,0 +1,26 @@
+{% extends "inst/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Messages</h2>
+    <p>Only users who follow each other can chat.</p>
+
+    <!-- Sidebar: Mutual Followers -->
+    <div class="row">
+        <div class="col-md-4 border-right">
+            <h4 class="p-3">Chats</h4>
+            <ul class="list-group list-group-flush">
+                {% for user in mutual_followers %}
+                <li class="list-group-item d-flex align-items-center">
+                    <img src="{{ user.profile_pic }}" class="rounded-circle mr-2" width="40" height="40" alt="User">
+                    <a href="{% url 'inst:chat' user.username %}" class="text-dark text-decoration-none">
+                        {{ user.username }}
+                    </a>
+                </li>
+                {% empty %}
+                <p class="p-3 text-muted">No mutual followers to chat with.</p>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

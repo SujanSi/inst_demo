@@ -39,5 +39,8 @@ urlpatterns = [
     path('profile/<str:username>/followers/', views.followers_list, name='followers_list'),
     path('profile/<str:username>/following/', views.following_list, name='following_list'),
 
+    path('messages/', views.message_list, name='messages'),
+    path("chat/<str:username>/", views.chat_view, name="chat"),  # Chat with a user
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 

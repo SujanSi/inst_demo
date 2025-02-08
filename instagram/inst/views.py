@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout 
 from .forms import SignupForm, LoginForm,StoryForm,PostForm,ProfileUpdateForm,CommentForm
 from django.contrib import messages
-from .models import Post,Profile,Story,Like,FollowRequest,Following
+from .models import Post,Profile,Story,Like,FollowRequest,Following,Message
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth.decorators import login_required
@@ -13,7 +13,8 @@ from django.db.models import Exists, OuterRef
 # Create your views here.
 @login_required
 def home(request):
-# Fetch all posts and annotate with whether the logged-in user has liked each post
+    user_profile, created = Profile.objects.get_or_create(user=request.user)
+    # Fetch all posts and annotate with whether the logged-in user has liked each post
     feeds = Post.objects.prefetch_related('comments', 'comments__user').annotate(
         liked_by_user=Exists(
             Like.objects.filter(user=request.user.profile, post=OuterRef('id'))
@@ -144,7 +145,7 @@ def profile_view(request):
     if not profile.bio:
         profile.bio = "No bio added yet."
     if not profile.profile_pic:
-        profile.profile_pic = "default_profile_pic.jpg"  # Use a placeholder image path
+        profile.profile_pic = "profile_pic/default_profile.jpg"  # Use a placeholder image path
 
     posts = Post.objects.filter(author=profile)
 
@@ -382,3 +383,45 @@ def following_list(request, username):
         'following': [f.following_user for f in following],
     }
     return render(request, 'inst/following_list.html', context)
+
+
+
+def message_list(request):
+    # Get logged-in user's profile
+    user_profile = get_object_or_404(Profile, user=request.user)
+
+    # Get mutual followers (users who follow each other)
+    following = Following.objects.filter(follower=user_profile).values_list('following_user', flat=True)
+    followers = Following.objects.filter(following_user=user_profile).values_list('follower', flat=True)
+
+    # Find users who are in both lists (mutual followers)
+    mutual_followers = Profile.objects.filter(id__in=set(following) & set(followers))
+
+        # Create a list of mutual followers with their profile picture
+    mutual_followers_data = [
+        {
+            "username": user.user.username,
+            "profile_pic": user.profile_pic.url if user.profile_pic else "/static/default-profile.png"
+        }
+        for user in mutual_followers
+    ]
+
+
+    context = {
+        'mutual_followers': mutual_followers_data,
+        
+    }
+    return render(request, 'inst/message_list.html', context)
+
+
+@login_required
+def chat_view(request, username):
+    other_user = get_object_or_404(Profile, user__username=username)
+    messages = Message.objects.filter(sender=request.user.profile, receiver=other_user) | \
+               Message.objects.filter(sender=other_user, receiver=request.user.profile)
+    messages = messages.order_by("timestamp")
+
+    return render(request, "inst/chat.html", {
+        "other_user": other_user,
+        "messages": messages
+    })
